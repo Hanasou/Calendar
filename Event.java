@@ -1,31 +1,50 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.time.LocalTime;
+import java.util.TreeSet;
 
-public class Event {
+public class Event implements Comparable<Event>{
 
 	private String name;
 	private LocalDate date;
-	private ArrayList<Event> list;
-	private String start;
-	private String end;
+	private TimeInterval interval;
 	
-	public Event(String name, LocalDate date, String start, String end) {
+	public Event(String name, LocalDate date, TimeInterval interval) {
 		this.name = name;
 		this.date = date;
-		this.start = start;
-		this.end = end;
+		this.interval = interval;
 	}
 	
-	public void printEvent() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/DD/YYYY");
-		System.out.println(name);
-		System.out.println(formatter.format(date));
+	public String toString() {
+		return name + " " + date.toString() + " " + interval.toString();
 	}
 	
-	public void printList() {
-		for (Event e : list) {
-			printEvent();
+	public String getName() {
+		return name;
+	}
+	
+	public LocalDate getDate() {
+		return date;
+	}
+	
+	public TimeInterval getInterval() {
+		return interval;
+	}
+	
+	/**
+	 * Compare events so that they get sorted properly in the event list. Compare their year, then month, then day.
+	 */
+	public int compareTo(Event that) {
+		int yearCmp = this.date.getYear() - that.date.getYear();
+		int monthCmp = this.date.getMonthValue() - that.date.getMonthValue();
+		int dayCmp = this.date.getDayOfMonth() - that.date.getDayOfMonth();
+		if (yearCmp != 0) {
+			return yearCmp;
 		}
+		if (monthCmp != 0) {
+			return monthCmp;
+		}
+		return dayCmp;
 	}
 }
