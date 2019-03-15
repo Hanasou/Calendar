@@ -25,6 +25,7 @@ public class MyCalendarTester {
         {
 			String input = sc.nextLine();
 			//load events from events.txt
+			//loading regular events not supported
 			if (input.equals("L")) {
 				Scanner events = new Scanner(eventText);
 				while (events.hasNextLine()) {
@@ -35,10 +36,13 @@ public class MyCalendarTester {
 					String next = events.nextLine();
 					TimeInterval loadInterval = new TimeInterval(LocalTime.parse(start), LocalTime.parse(end));
 					Event loadEvent = new Event(name, LocalDate.parse(date), loadInterval);
+					overlap = false;
 					for (Event e : cal.getList()) {
 						if (loadEvent.getDate().equals(e.getDate())) {
 							if (loadEvent.getInterval().checkOverlap(e.getInterval())) {
 								overlap = true;
+								System.out.println("This event conflicts with another");
+								break;
 							}
 						}
 					}
@@ -46,9 +50,6 @@ public class MyCalendarTester {
 						cal.getList().add(loadEvent);
 						overlap = false;
 						System.out.println(loadEvent.toString());
-					}
-					else {
-						System.out.println("This event conflicts with another");
 					}
 				}
 				events.close();
@@ -60,9 +61,9 @@ public class MyCalendarTester {
 				String name = sc.nextLine();
 				System.out.println("Date (YYYY-MM-DD): ");
 				String date = sc.nextLine();
-				System.out.println("Start Time (24 hour clock): ");
+				System.out.println("Start Time (24 hour clock, HH:MM): ");
 				String start = sc.nextLine();
-				System.out.println("End Time (24 hour clock): ");
+				System.out.println("End Time (24 hour clock, HH:MM): ");
 				String end = sc.nextLine();
 				TimeInterval newInterval = new TimeInterval(LocalTime.parse(start), LocalTime.parse(end));
 				Event newEvent = new Event(name, LocalDate.parse(date), newInterval);
@@ -97,12 +98,14 @@ public class MyCalendarTester {
 					   String option = sc.nextLine();
 					   if (option.equals("P")) {
 						   cal.retractByDay(1);
+						   now = now.minusDays(1);
 						   System.out.println(dayFormatter.format(now));
 						   cal.printEventsPerDay();
 						   System.out.println("[P]revious, [N]ext, or [Go] Back? : ");
 					   }
 					   else if (option.equals("N")) {
 						   cal.advanceByDay(1);
+						   now = now.plusDays(1);
 						   System.out.println(dayFormatter.format(now));
 						   cal.printEventsPerDay();
 						   System.out.println("[P]revious, [N]ext, or [Go] Back? : ");

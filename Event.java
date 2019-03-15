@@ -59,6 +59,7 @@ public class Event implements Comparable<Event>{
 	
 	/**
 	 * Compare events so that they get sorted properly in the event list. Compare their year, then month, then day.
+	 * @param event that is being compared
 	 */
 	@Override
 	public int compareTo(Event that) {
@@ -80,6 +81,7 @@ public class Event implements Comparable<Event>{
 	
 	/**
 	 * Equals method to check whether two events are the same or not
+	 * @param x object that is being compared to
 	 */
 	@Override
 	public boolean equals(Object x) {
